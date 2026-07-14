@@ -1,0 +1,66 @@
+<app-navbar [userName]="data?.user?.prenom || ''"></app-navbar>
+
+<div class="home-page">
+  <div *ngIf="loading" class="text-center py-5">
+    <i class="fa fa-spinner fa-spin fa-2x"></i>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger container mt-4">
+    {{ errorMessage }}
+  </div>
+
+  <ng-container *ngIf="data && !loading">
+    <div class="hero">
+      <div class="hero-content">
+        <h1>Bienvenue, {{ data.user.prenom }} 👋</h1>
+        <p>Gérez vos transactions et vos amis en toute sécurité avec PayMe</p>
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon friends"><i class="fa fa-users"></i></div>
+          <div>
+            <div class="stat-value">{{ data.friends.length }}</div>
+            <div class="stat-label">Amis</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon email"><i class="fa fa-envelope"></i></div>
+          <div>
+            <div class="stat-value small">{{ data.user.email }}</div>
+            <div class="stat-label">Email</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>Vos amis</h2>
+          <a routerLink="/add-friend" class="btn-add">
+            <i class="fa fa-plus"></i> Ajouter un ami
+          </a>
+        </div>
+
+        <div class="friends-grid" *ngIf="data.friends.length > 0; else noFriends">
+          <div class="friend-card" *ngFor="let friend of data.friends">
+            <div class="friend-avatar">{{ initials(friend.nom || friend.email) }}</div>
+            <div class="friend-info">
+              <div class="friend-name">{{ friend.nom || friend.email }} {{ friend.prenom || '' }}</div>
+              <div class="friend-email" *ngIf="friend.nom">{{ friend.email }}</div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noFriends>
+          <div class="empty-state">
+            <i class="fa fa-user-plus fa-2x"></i>
+            <p>Vous n'avez pas encore d'amis ajoutés</p>
+            <a routerLink="/add-friend" class="btn btn-primary btn-sm">Ajouter votre premier ami</a>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+</div>

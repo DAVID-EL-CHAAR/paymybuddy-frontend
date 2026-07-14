@@ -1,0 +1,48 @@
+<app-navbar></app-navbar>
+
+<div class="page">
+  <div class="card">
+    <div class="text-center mb-4">
+      <i class="fa fa-user-plus fa-2x icon-header"></i>
+      <h1>Ajouter un ami</h1>
+      <p class="subtitle">Entrez l'email de la personne que vous voulez ajouter</p>
+    </div>
+
+    <p class="alert alert-success fade-in" *ngIf="successMessage">
+      <i class="fa fa-check-circle"></i> {{ successMessage }}
+    </p>
+    <p class="alert alert-danger fade-in" *ngIf="errorMessage">
+      <i class="fa fa-exclamation-circle"></i> {{ errorMessage }}
+    </p>
+
+    <form (ngSubmit)="onSubmit()" #friendForm="ngForm">
+      <div class="form-group mb-3">
+        <div class="input-icon-group">
+          <i class="fa fa-envelope icon"></i>
+          <input
+            type="email"
+            class="form-control"
+            name="friendEmail"
+            placeholder="Email de votre ami"
+            [(ngModel)]="friendEmail"
+            required
+            email>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-submit"
+          [disabled]="friendForm.invalid || loading">
+          <span *ngIf="!loading">Ajouter</span>
+          <span *ngIf="loading"><i class="fa fa-spinner fa-spin"></i> Ajout en cours...</span>
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-4">
+      <a routerLink="/home" class="back-link"><i class="fa fa-arrow-left"></i> Retour à l'accueil</a>
+    </div>
+  </div>
+</div>

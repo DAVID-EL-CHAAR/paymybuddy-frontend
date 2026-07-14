@@ -1,0 +1,62 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <span class="brand-badge">PayMe</span>
+    </div>
+
+    <p class="alert alert-danger fade-in" *ngIf="errorMessage">
+      <i class="fa fa-exclamation-circle"></i> {{ errorMessage }}
+    </p>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div class="form-group mb-3">
+        <div class="input-icon-group">
+          <i class="fa fa-envelope icon"></i>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            placeholder="Email"
+            maxlength="30"
+            [(ngModel)]="email"
+            required
+            email
+            #emailInput="ngModel">
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <div class="input-icon-group">
+          <i class="fa fa-lock icon"></i>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            placeholder="Mot de passe"
+            maxlength="30"
+            [(ngModel)]="password"
+            required
+            #passwordInput="ngModel">
+        </div>
+      </div>
+
+      <div class="form-check text-center mb-3">
+        <input type="checkbox" class="form-check-input" id="remember-me">
+        <label class="form-check-label" for="remember-me">Se souvenir de moi</label>
+      </div>
+
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-submit"
+          [disabled]="loginForm.invalid">
+          Se connecter
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-4">
+      <a routerLink="/register" class="btn btn-outline-primary btn-register">S'inscrire</a>
+    </div>
+  </div>
+</div>

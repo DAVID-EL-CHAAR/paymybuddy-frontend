@@ -1,0 +1,87 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <span class="brand-badge">PayMe</span>
+    </div>
+
+    <p class="alert alert-success fade-in" *ngIf="successMessage">
+      <i class="fa fa-check-circle"></i> {{ successMessage }}
+    </p>
+    <p class="alert alert-danger fade-in" *ngIf="errorMessage">
+      <i class="fa fa-exclamation-circle"></i> {{ errorMessage }}
+    </p>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="form-group mb-3">
+        <div class="input-icon-group">
+          <i class="fa fa-user icon"></i>
+          <input
+            type="text"
+            class="form-control"
+            name="nom"
+            placeholder="Nom"
+            maxlength="30"
+            [(ngModel)]="nom"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <div class="input-icon-group">
+          <i class="fa fa-user icon"></i>
+          <input
+            type="text"
+            class="form-control"
+            name="prenom"
+            placeholder="Prénom"
+            maxlength="30"
+            [(ngModel)]="prenom"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <div class="input-icon-group">
+          <i class="fa fa-envelope icon"></i>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            placeholder="Email"
+            maxlength="30"
+            [(ngModel)]="email"
+            required
+            email>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <div class="input-icon-group">
+          <i class="fa fa-lock icon"></i>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            placeholder="Mot de passe"
+            maxlength="30"
+            [(ngModel)]="password"
+            required
+            minlength="6">
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-submit"
+          [disabled]="registerForm.invalid">
+          S'inscrire
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-4">
+      <a routerLink="/login" class="btn btn-outline-primary btn-register">Déjà un compte ? Se connecter</a>
+    </div>
+  </div>
+</div>
