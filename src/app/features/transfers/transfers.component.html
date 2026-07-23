@@ -1,0 +1,111 @@
+<app-navbar></app-navbar>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-content">
+      <i class="fa fa-random fa-2x"></i>
+      <h1>Transferts</h1>
+      <p>Alimentez votre compte PayMe ou retirez vers votre banque</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="card">
+      <div class="direction-switch">
+        <button
+          class="switch-btn"
+          [class.active]="direction === 'bankToPmb'"
+          (click)="direction = 'bankToPmb'">
+          <i class="fa fa-bank"></i> Banque → PayMe
+        </button>
+        <button
+          class="switch-btn"
+          [class.active]="direction === 'pmbToBank'"
+          (click)="direction = 'pmbToBank'">
+          <i class="fa fa-money"></i> PayMe → Banque
+        </button>
+      </div>
+
+      <p class="alert-success fade-in" *ngIf="successMessage">
+        <i class="fa fa-check-circle"></i> {{ successMessage }}
+      </p>
+      <p class="alert-error fade-in" *ngIf="errorMessage">
+        <i class="fa fa-exclamation-circle"></i> {{ errorMessage }}
+      </p>
+
+      <form (ngSubmit)="onSubmit()" #transferForm="ngForm">
+       <div class="form-group" *ngIf="!loadingAccounts && bankAccounts.length > 0">
+        <label>Compte bancaire</label>
+        <select class="form-control" name="rib" [(ngModel)]="rib" required>
+            <option value="" disabled selected>-- Sélectionnez un compte --</option>
+            <option *ngFor="let acc of bankAccounts" [value]="acc.rib">
+              {{ acc.nom }} {{ acc.prenom }} — {{ acc.rib }} ({{ acc.balance | number: '1.2-2' }} €)
+            </option>
+        </select>
+       </div>
+
+        <div class="empty-accounts" *ngIf="!loadingAccounts && bankAccounts.length === 0">
+         <i class="fa fa-exclamation-triangle"></i>
+          Vous devez avoir un compte bancaire pour effectuer un transfert.
+         <a routerLink="/bank-accounts">Ajouter un compte bancaire</a>
+        </div>
+
+        <div class="form-group">
+          <label>Montant (€)</label>
+          <input type="number" class="form-control" name="amount" min="1" step="0.01" [(ngModel)]="amount" required>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="transferForm.invalid || submitting">
+          <span *ngIf="!submitting"><i class="fa fa-arrow-right"></i> Transférer</span>
+          <span *ngIf="submitting"><i class="fa fa-spinner fa-spin"></i> Transfert en cours...</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="card history-card">
+      <h2>Historique des transferts</h2>
+
+      <div *ngIf="loadingHistory" class="state-block">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+      </div>
+
+      <div *ngIf="!loadingHistory && history.length === 0" class="empty-state">
+        <i class="fa fa-inbox fa-2x"></i>
+        <p>Aucun transfert pour le moment</p>
+      </div>
+
+      <table class="history-table" *ngIf="!loadingHistory && history.length > 0">
+        <thead>
+          <tr>
+            <th>De</th>
+            <th>Vers</th>
+            <th>Montant</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of history">
+            <td>{{ t.fromAccount }}</td>
+            <td>{{ t.toAccount }}</td>
+            <td class="amount">{{ t.amount | number: '1.2-2' }} €</td>
+            <td>{{ t.transferDate }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button
+          *ngFor="let p of pageNumbers"
+          class="page-btn"
+          [class.active]="p === currentPage"
+          (click)="goToPage(p)">
+          {{ p }}
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <a routerLink="/home" class="back-link"><i class="fa fa-arrow-left"></i> Retour à l'accueil</a>
+    </div>
+  </div>
+</div>

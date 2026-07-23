@@ -1,0 +1,57 @@
+<app-navbar></app-navbar>
+
+<div class="profile-page">
+  <div class="hero">
+    <div class="hero-content">
+      <i class="fa fa-user-circle fa-2x"></i>
+      <h1>Mon profil</h1>
+      <p>Gérez votre compte PayMyBuddy</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div *ngIf="loading" class="state-block">
+      <i class="fa fa-spinner fa-spin fa-2x"></i>
+    </div>
+
+    <div *ngIf="!loading && errorMessage" class="alert-error fade-in">
+      <i class="fa fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!loading && successMessage" class="alert-success fade-in">
+      <i class="fa fa-check-circle"></i> {{ successMessage }}
+    </div>
+
+    <!-- Compte activé : affiche les infos -->
+    <div class="card" *ngIf="!loading && activated && account">
+      <div class="account-header">
+        <div class="avatar-big">{{ initials(account.nom) }}</div>
+        <div>
+          <div class="account-name">{{ account.nom }} {{ account.prenom }}</div>
+          <div class="account-email">{{ account.email }}</div>
+        </div>
+      </div>
+
+      <div class="balance-box">
+        <div class="balance-label">Solde disponible</div>
+        <div class="balance-value">{{ account.balance | number: '1.2-2' }} €</div>
+      </div>
+    </div>
+
+    <!-- Compte non activé -->
+    <div class="card text-center" *ngIf="!loading && !activated">
+      <i class="fa fa-lock fa-2x icon-locked"></i>
+      <h2>Compte PayMyBuddy non activé</h2>
+      <p class="subtitle">Activez votre compte pour pouvoir envoyer et recevoir de l'argent</p>
+      <button class="btn-activate" (click)="activate()" [disabled]="activating">
+        <span *ngIf="!activating"><i class="fa fa-unlock"></i> Activer mon compte</span>
+        <span *ngIf="activating"><i class="fa fa-spinner fa-spin"></i> Activation...</span>
+      </button>
+    </div>
+
+    <div class="text-center mt-4">
+      <a routerLink="/home" class="back-link"><i class="fa fa-arrow-left"></i> Retour à l'accueil</a>
+    </div>
+  </div>
+</div>

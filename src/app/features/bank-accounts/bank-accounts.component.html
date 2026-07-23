@@ -1,0 +1,100 @@
+<app-navbar></app-navbar>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-content">
+      <i class="fa fa-bank fa-2x"></i>
+      <h1>Comptes bancaires</h1>
+      <p>Gérez vos comptes liés à PayMe</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <p class="alert-success fade-in" *ngIf="successMessage">
+      <i class="fa fa-check-circle"></i> {{ successMessage }}
+    </p>
+    <p class="alert-error fade-in" *ngIf="errorMessage && !formVisible">
+      <i class="fa fa-exclamation-circle"></i> {{ errorMessage }}
+    </p>
+
+    <!-- Formulaire ajout/modif -->
+    <div class="card form-card" *ngIf="formVisible">
+      <h2>{{ editingId ? 'Modifier le compte' : 'Ajouter un compte' }}</h2>
+
+      <p class="alert-error fade-in" *ngIf="errorMessage">
+        <i class="fa fa-exclamation-circle"></i> {{ errorMessage }}
+      </p>
+
+      <form (ngSubmit)="onSubmit()" #accountForm="ngForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" class="form-control" name="nom" [(ngModel)]="nom" required>
+          </div>
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" class="form-control" name="prenom" [(ngModel)]="prenom" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>RIB</label>
+          <input type="text" class="form-control" name="rib" [(ngModel)]="rib" required>
+        </div>
+
+        <div class="form-group">
+          <label>Solde (min. 10€)</label>
+          <input type="number" class="form-control" name="balance" min="10" step="0.01" [(ngModel)]="balance" required>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="cancelForm()">Annuler</button>
+          <button type="submit" class="btn-submit" [disabled]="accountForm.invalid || submitting">
+            <span *ngIf="!submitting">{{ editingId ? 'Modifier' : 'Ajouter' }}</span>
+            <span *ngIf="submitting"><i class="fa fa-spinner fa-spin"></i></span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Liste -->
+    <div *ngIf="loading" class="state-block">
+      <i class="fa fa-spinner fa-spin fa-2x"></i>
+    </div>
+
+    <ng-container *ngIf="!loading">
+      <div class="accounts-list" *ngIf="accounts.length > 0">
+        <div class="account-card" *ngFor="let account of accounts">
+          <div class="account-icon"><i class="fa fa-credit-card"></i></div>
+          <div class="account-info">
+            <div class="account-name">{{ account.nom }} {{ account.prenom }}</div>
+            <div class="account-rib">{{ account.rib }}</div>
+          </div>
+          <div class="account-balance">{{ account.balance | number: '1.2-2' }} €</div>
+          <div class="account-actions">
+            <button class="icon-btn" (click)="openEditForm(account)" title="Modifier">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button class="icon-btn danger" (click)="deleteAccount(account.id)" title="Supprimer">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="accounts.length === 0 && !formVisible">
+        <i class="fa fa-bank fa-2x"></i>
+        <p>Vous n'avez pas encore de compte bancaire</p>
+      </div>
+
+      <button class="btn-add-account" *ngIf="!formVisible" (click)="openAddForm()">
+        <i class="fa fa-plus"></i> Ajouter un compte bancaire
+      </button>
+    </ng-container>
+
+    <div class="text-center mt-4">
+      <a routerLink="/home" class="back-link"><i class="fa fa-arrow-left"></i> Retour à l'accueil</a>
+    </div>
+  </div>
+</div>
